@@ -1,4 +1,5 @@
 version: 2.1
+# Save node_modules cached
 commands:
   save-npm-cache:
     description: "save node modules folder"
@@ -40,25 +41,6 @@ jobs:
       - checkout
       - restore-npm-cache
       - run: npm run test
-    
-  deploy:
-    docker:
-      - image: cimg/node:17.9.1
-    steps:
-      - checkout
-      - run: npm install
-      - run: npm run build
-      - run: mkdir .vercel
-      - run: 
-          working_directory: ./.vercel
-          command: cat > project.json
-      - run: 
-          working_directory: ./.vercel
-          command: echo '{"projectId":"prj_bCHLBTvYD8Eticcxe6jhiT4IayF5"}' > project.json
-      - run:
-          working_directory: ./.vercel
-          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
-      # - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-demo-circleci.surge.sh
 
 workflows:
   build-and-deploy:
@@ -70,6 +52,3 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
-          requires:
-            - test
