@@ -50,15 +50,15 @@ jobs:
       - checkout
       - restore-npm-cache
       - run: npm run build
-      - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-test.surge.sh
+      - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-demo-circleci.surge.sh
 
 workflows:
   build-and-deploy:
     jobs:
-      - fetch-code
+      # - fetch-code
       - build: 
-          requires:
-            - fetch-code
+          # requires:
+          #   - fetch-code
       - test:
           requires:
             - build
