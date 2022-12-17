@@ -55,10 +55,10 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      # - fetch-code
+      - fetch-code
       - build: 
-          # requires:
-          #   - fetch-code
+          requires:
+            - fetch-code
       - test:
           requires:
             - build
