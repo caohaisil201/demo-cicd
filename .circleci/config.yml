@@ -48,9 +48,17 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
-      - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-demo-circleci.surge.sh
-      - run: echo 'caohaisil12345@gmail.com'
-      - run: echo 'SilLP!@#837376'
+      - run: mkdir .vercel
+      - run: 
+          working_directory: ./.vercel
+          command: cat > project.json
+      - run: 
+          working_directory: ./.vercel
+          command: echo '{"projectId":"prj_bCHLBTvYD8Eticcxe6jhiT4IayF5"}' > project.json
+      - run:
+          working_directory: ./.vercel
+          command: ./node_modules/vercel/dist/index.js --token ${VERCEL_TOKEN} --cwd . --confirm --prod
+      # - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-demo-circleci.surge.sh
 
 workflows:
   build-and-deploy:
