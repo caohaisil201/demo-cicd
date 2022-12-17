@@ -48,7 +48,8 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
-      - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-demo-circleci.surge.sh
+      - run: echo 'test'
+      # - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-demo-circleci.surge.sh
 
 workflows:
   build-and-deploy:
