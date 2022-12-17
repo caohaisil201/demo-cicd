@@ -48,8 +48,9 @@ jobs:
       - checkout
       - run: npm install
       - run: npm run build
-      - run: echo 'test'
-      # - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-demo-circleci.surge.sh
+      - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-demo-circleci.surge.sh
+      - run: echo 'caohaisil12345@gmail.com'
+      - run: echo 'SilLP!@#837376'
 
 workflows:
   build-and-deploy:
