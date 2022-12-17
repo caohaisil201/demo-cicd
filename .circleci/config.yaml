@@ -1,0 +1,67 @@
+version: 2.1
+commands:
+  save-npm-cache:
+    description: "save node modules folder"
+    steps:
+      - save_cache:
+          key: -v1-{{ checksum "package-lock.json"}}
+          paths:
+            - node_modules
+  restore-npm-cache:
+    description: "restore node modules folder"
+    steps:
+      - restore_cache:
+          keys:
+            - -v1-{{ checksum "package-lock.json"}}
+            - -v1-
+
+jobs:  
+  fetch-code:
+    docker:
+      - image: cimg/node:17.9.1
+    steps:
+      - checkout
+      - restore-npm-cache
+      - run: npm install
+      - save-npm-cache
+      # - run: npm run build
+      # - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-test.surge.sh
+
+  build:
+    docker:
+      - image: cimg/node:17.9.1
+    steps:
+      - checkout
+      - restore-npm-cache
+      - run: npm run build
+
+  test:
+    docker:
+      - image: cimg/node:17.9.1
+    steps:
+      - checkout
+      - restore-npm-cache
+      - run: npm run test
+    
+  deploy:
+    docker:
+      - image: cimg/node:17.9.1
+    steps:
+      - checkout
+      - restore-npm-cache
+      - run: npm run build
+      - run: ./node_modules/surge/lib/cli.js --project ./build --domain sil-test.surge.sh
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - fetch-code
+      - build: 
+          requires:
+            - fetch-code
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
